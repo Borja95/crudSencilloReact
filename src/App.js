@@ -14,23 +14,27 @@ import {
 } from "reactstrap";
 
 const data = [
-  { id: 1, personaje: "Naruto", anime: "Naruto" },
-  { id: 2, personaje: "Goku", anime: "Dragon Ball" },
-  { id: 3, personaje: "Kenshin Himura", anime: "Rurouni Kenshin" },
-  { id: 4, personaje: "Monkey D. Luffy", anime: "One Piece" },
-  { id: 5, personaje: "Edward Elric", anime: "Fullmetal Alchemist: Brotherhood"},
-  { id: 6, personaje: "Seto Kaiba", anime: "Yu-Gi-Oh!" },
 ];
+
+const sectores = [{
+  id:1,sector:"VIP",precio_unitario:"10000"
+},
+{
+  id:2,sector:"Platea",precio_unitario:"7000"
+},
+{
+  id:3,sector:"Campo",precio_unitario:"3000"
+}]
 
 class App extends React.Component {
   state = {
-    data: data,
+    data: sectores,
     modalActualizar: false,
     modalInsertar: false,
     form: {
       id: "",
-      personaje: "",
-      anime: "",
+      sector: "",
+      precio_unitario: ""
     },
   };
 
@@ -60,8 +64,8 @@ class App extends React.Component {
     var arreglo = this.state.data;
     arreglo.map((registro) => {
       if (dato.id == registro.id) {
-        arreglo[contador].personaje = dato.personaje;
-        arreglo[contador].anime = dato.anime;
+        arreglo[contador].sector = dato.sector;
+        arreglo[contador].precio_unitario = dato.precio_unitario;
       }
       contador++;
     });
@@ -100,6 +104,11 @@ class App extends React.Component {
     });
   };
 
+  onInputChange = (e) => {
+    const precio = e.target.value
+    console.log(precio)
+  };
+
   render() {
     
     return (
@@ -113,9 +122,8 @@ class App extends React.Component {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Personaje</th>
-                <th>Anime</th>
-                <th>Acción</th>
+                <th>Sector</th>
+                <th>Total</th>
               </tr>
             </thead>
 
@@ -123,8 +131,8 @@ class App extends React.Component {
               {this.state.data.map((dato) => (
                 <tr key={dato.id}>
                   <td>{dato.id}</td>
-                  <td>{dato.personaje}</td>
-                  <td>{dato.anime}</td>
+                  <td>{dato.sector}</td>
+                  <td>{}</td>
                   <td>
                     <Button
                       color="primary"
@@ -138,7 +146,14 @@ class App extends React.Component {
               ))}
             </tbody>
           </Table>
+          <Button
+              className="btn btn-success"
+            >
+              Comprar
+            </Button>
         </Container>
+
+
 
         <Modal isOpen={this.state.modalActualizar}>
           <ModalHeader>
@@ -161,27 +176,53 @@ class App extends React.Component {
             
             <FormGroup>
               <label>
-                Personaje: 
+                Sector: 
               </label>
               <input
                 className="form-control"
-                name="personaje"
+                name="sector"
                 type="text"
                 onChange={this.handleChange}
-                value={this.state.form.personaje}
+                value={this.state.form.sector}
               />
             </FormGroup>
             
             <FormGroup>
               <label>
-                Anime: 
+                Precio Unitario: 
               </label>
               <input
                 className="form-control"
-                name="anime"
+                name="precio_unitario"
                 type="text"
                 onChange={this.handleChange}
-                value={this.state.form.anime}
+                value={this.state.form.precio_unitario}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <label>
+                Cantidad: 
+              </label>
+              <input
+                className="form-control"
+                name="cantidad"
+                type="text"
+                onChange={this.handleChange}
+                value={this.state.form.cantidad}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <label>
+                Total: 
+              </label>
+              <input
+                className="form-control"
+                name="total"
+                type="text"
+                onChange={this.handleChange}
+                value={this.state.form.cantidad*this.state.form.precio_unitario}
               />
             </FormGroup>
           </ModalBody>
@@ -206,7 +247,7 @@ class App extends React.Component {
 
         <Modal isOpen={this.state.modalInsertar}>
           <ModalHeader>
-           <div><h3>Insertar Personaje</h3></div>
+           <div><h3>Insertar Entrada</h3></div>
           </ModalHeader>
 
           <ModalBody>
@@ -225,25 +266,53 @@ class App extends React.Component {
             
             <FormGroup>
               <label>
-                Personaje: 
+                Sector: 
               </label>
-              <input
-                className="form-control"
-                name="personaje"
-                type="text"
-                onChange={this.handleChange}
-              />
+              <select className='form-control' name='sectorSelected' onChange={this.onInputChange}>
+                  {
+                      
+this.state.data.map
+( element => 
+                      <option key={element.id} value={element.precio_unitario}>
+                        {element.sector}
+                      </option>)
+                  }
+                </select> 
             </FormGroup>
             
             <FormGroup>
               <label>
-                Anime: 
+                Precio Unitario: 
               </label>
               <input
                 className="form-control"
-                name="anime"
+                name="preciounitario"
+                type="text"
+                onChange={this.onInputChange}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <label>
+                Cantidad: 
+              </label>
+              <input
+                className="form-control"
+                name="cantidad"
                 type="text"
                 onChange={this.handleChange}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <label>
+                Total: 
+              </label>
+              <input
+                className="form-control"
+                name="total"
+                type="text"
+                value={this.state.form.cantidad*this.state.form.precio_unitario}
               />
             </FormGroup>
           </ModalBody>
@@ -261,6 +330,7 @@ class App extends React.Component {
             >
               Cancelar
             </Button>
+
           </ModalFooter>
         </Modal>
       </>
